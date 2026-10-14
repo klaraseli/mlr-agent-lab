@@ -52,7 +52,7 @@ part "5. ML study". Project is worth 5 of the 30 semester points.
 
 **File:** `data/leaves.csv` — 10,024 bytes, 519 lines (1 header + 518 data rows).
 The assignment says to save it as `data/leaves.csv` and **record where it came
-from** — see the open question below.
+from** — done, see Provenance below.
 
 **Columns:**
 
@@ -139,13 +139,27 @@ would that mean for a train/test split?").
    coordinate-duplicates (518 → 489) changes pooled Pearson 0.5894 → 0.5923.
    So duplicates are present but are *not* what drives the headline numbers.
 
-**Provenance — OPEN, and the assignment requires it.** I could not establish
-where `leaves.csv` came from: not in git history, no other copy on disk, and
-nothing in this repo writes to `data/` (every reference is a read). It appeared
-2026-10-14 08:39. **Klára — the assignment says to record where the data came
-from.** Where did you get it? (Moodle? handed out in the lab? If you do not
-know, say "provided by the course, source unrecorded" — but do not leave the
-sentence out, it is an explicit requirement.)
+**Provenance — RESOLVED.** The dataset is published by the course itself, at
+
+> <https://tomasvicar.github.io/MLR-public/data/leaves.csv>
+
+which is the `Download leaves.csv` link in the Exercise 5 description at
+<https://tomasvicar.github.io/MLR-public/exercises/ex05.html>. The assignment
+describes it as *"518 leaves, three tree types; you know it from the earlier
+labs"*.
+
+Verified rather than assumed — our copy is **byte-identical** to the published
+one:
+
+```
+$ shasum -a 256 data/leaves.csv   # and the freshly downloaded copy
+b24ad6369c3c29c8cb35084357940aff335d8fa79b3ee4d94559c670f8a4e839  both
+10024 bytes, 519 lines, in both
+```
+
+So the data is reproduced from a fetchable URL, not a file of unknown origin.
+Anyone re-running this can `curl` that link and get the same bytes. (Note the
+local file's 2026-10-14 08:39 timestamp is just a download/extract artefact.)
 
 ---
 
@@ -279,8 +293,6 @@ guess."** So the value of this file is precisely in how few guesses are left.
 
 Park anything unresolved here rather than guessing:
 
-- [ ] Provenance of `data/leaves.csv` — **assignment requires this**, and it is
-      the one Context item I could not determine.
 - [ ] Deduplicate before splitting, split by block, or keep and report both?
 - [ ] Are the three *blocks* treated as three sources in the write-up, or pooled?
 - [ ] `uv init` / `uv add` / pin `scikit-learn` — before or during modelling?
