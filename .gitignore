@@ -29,6 +29,13 @@ ENV/
 .coverage
 htmlcov/
 
+# Secrets / local config — never commit these
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
 # Editor / OS
 .vscode/
 .idea/
