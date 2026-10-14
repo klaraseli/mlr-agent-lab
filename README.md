@@ -39,8 +39,10 @@ uvx <tool>               # run a one-off tool without installing it
 | `README.md` | This file — goal and how to run things |
 | `AGENTS.md` | **Working rules for agents.** Read first. |
 | `CLAUDE.md` | Imports `AGENTS.md` so Claude Code loads those rules |
+| `SPEC.md` | The task: goal, context, constraints, done-when. Read second. |
 | `PLAN.md` | Progress and the next step |
 | `RUNS.md` | Log of agent sessions: model, request, how it was verified |
+| `data/leaves.csv` | The dataset — 518 leaves, three tree types. Origin and hash in `SPEC.md`. |
 
 ## Working rules
 

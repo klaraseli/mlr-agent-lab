@@ -61,3 +61,47 @@ inferring a model family from the alias name.
   `claude-code:unrecognized_model {"model":"agentic"}` — Claude Code does not
   recognize `agentic` and assumes a 200k context window. Harmless for these
   tasks, but relevant if long-context work is planned against this gateway.
+
+### 2026-10-14 — exercise 5, steps 1–2 (look at the data, write SPEC.md)
+
+- **Model:** `/model` default `thinker` (per the environment table above);
+  effort high.
+- **Asked:** Step 1 — "Show me leaves.csv: how many leaves of each type, a
+  scatter plot of height against width, and anything unusual." Step 2 — "Create
+  `SPEC.md` with the four headings from the lecture and fill them in your own
+  words... Write a first draft yourself and commit it, then let the agent
+  interview you."
+- **Checks run and their real output:**
+  1. **Class counts** verified by `groupby`: maple 216 (41.7%), cherry 173
+     (33.4%), walnut 129 (24.9%) — sums to 518.
+  2. **Duplicate count contradiction resolved.** A first check reported 0
+     duplicates; that was a **bug in the check** (a unique row index was inserted
+     before `drop_duplicates()`, so nothing could match). Rebuilt against raw CSV
+     text via `csv.reader`, no float coercion: 26 exact-duplicate rows, 29 rows
+     duplicating another's `(height, width)`. pandas agrees exactly. The earlier
+     nil finding was reported to the user as wrong rather than quietly fixed.
+  3. **Three-block structure** verified three independent ways (decimal-place
+     partition, raw-text scan, pandas) — exactly 3 contiguous runs, rows 0–99,
+     100–301, 302–517.
+  4. **Dedup sensitivity measured, not assumed:** full-row dedup 518 → 492,
+     Pearson 0.5894 → 0.5891; coordinate dedup 518 → 489, 0.5894 → 0.5923.
+  5. **Dataset provenance verified by hash** — the course publishes
+     `leaves.csv` at `tomasvicar.github.io/MLR-public/data/leaves.csv`; our copy
+     is byte-identical, `sha256 b24ad636…f8a4e839`, 10,024 bytes. This closed
+     the one Context item that was genuinely unknown.
+  6. **Split and grid numbers executed, not estimated** — 20% stratified split
+     with `random_state=42` gives 104 test rows (maple 43 / cherry 35 /
+     walnut 26), baseline 41.35% on that set; grid totals 68 candidates.
+     An earlier estimate of "106 candidates, largest grid random forest" written
+     into `SPEC.md` was **wrong** and was corrected to 68 with the decision tree
+     as the largest grid.
+- **Failure reported, not hidden:** `verify_blocks.py` first died with
+  `ModuleNotFoundError: No module named 'scipy'` (pandas delegates Spearman to
+  scipy); re-run with `--with scipy`. Separately, printing `\u2192` to the cp1250
+  Windows console raised `UnicodeEncodeError`; fixed with `PYTHONIOENCODING=utf-8`
+  and writing to a file instead of stdout.
+- **Not verified:** nothing in steps 3–7 has been run. No classifier has been
+  fitted, so `SPEC.md`'s expected accuracy range is an expectation, not a
+  result. The three steps that follow are where the real numbers come from.
+- **Commits:** `0e70dbc` (SPEC.md draft), `b04cdc2` (provenance).
+  **Not pushed** — outward-facing actions need explicit approval (`AGENTS.md` §6).
